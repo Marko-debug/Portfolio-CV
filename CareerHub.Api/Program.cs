@@ -2,67 +2,90 @@ using CareerHubApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add controllers & Swagger
-builder.Services.AddControllers();
+// ✅ Add Controllers & prevent circular JSON issues
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.ReferenceHandler =
+            System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
 builder.Services.AddEndpointsApiExplorer();
+
+// ✅ Swagger Configuration
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new() { Title = "CareerHub API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "CareerHub API",
+        Version = "v1"
+    });
 
-    // ✅ Add JWT support to Swagger
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    // ✅ JWT Support in Swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        In = ParameterLocation.Header,
         Description = "Enter your JWT token like this: **Bearer {your token}**"
     });
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            new OpenApiSecurityScheme
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                Reference = new OpenApiReference
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 }
             },
             Array.Empty<string>()
         }
     });
+
+    // ✅ Handle file uploads manually — no external filter needed
+    options.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary",
+        Description = "Upload a file"
+    });
 });
 
 
-// ✅ Database
+// ✅ Enable file upload & Newtonsoft JSON compatibility for Swagger
+builder.Services.AddSwaggerGenNewtonsoftSupport();
+
+// ✅ Database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ CORS policy
+// ✅ CORS policy for frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowCareerHubApp", policy =>
     {
         policy
-            .WithOrigins("http://localhost:3000")
+            .WithOrigins("https://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials()
-            .WithExposedHeaders("Access-Control-Allow-Origin")
-            .SetIsOriginAllowed(origin => true);
+            .AllowCredentials();
     });
 });
 
-
-// ✅ JWT Authentication configuration (ADD THIS SECTION)
-var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key missing in configuration.");
+// ✅ JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT Key missing in configuration.");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -77,27 +100,33 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
-    });
 
+        // ✅ Read JWT token from HttpOnly cookie
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("jwt"))
+                    context.Token = context.Request.Cookies["jwt"];
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 var app = builder.Build();
 
-// Swagger only in development
+// ✅ Swagger only in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// ✅ ORDER MATTERS
+// ✅ Middleware order matters
 app.UseHttpsRedirection();
-
 app.UseCors("AllowCareerHubApp");
-
-// 🔐 Enable authentication & authorization
-app.UseAuthentication(); // <--- MUST come before UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
-
+// app.UseMiddleware<CsrfMiddleware>();
 app.MapControllers();
-
 app.Run();

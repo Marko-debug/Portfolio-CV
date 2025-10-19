@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "./apiConfig";
+import { getCsrfToken } from "./authService"
 
 export interface Experience {
   id: number;
@@ -12,49 +13,34 @@ export interface Experience {
 const ENDPOINT = `${API_BASE_URL}/experience`;
 
 /**
- * 🔑 Helper: get token from localStorage
- */
-function getAuthToken(): string | null {
-  return localStorage.getItem("token");
-}
-
-/**
  * ✅ Get all experiences
+ * - Cookies are sent automatically (if logged in)
  */
 export async function getExperiences(): Promise<Experience[]> {
-  const token = getAuthToken();
-  const res = await fetch(ENDPOINT, {
-    headers: token
-      ? { Authorization: `Bearer ${token}` }
-      : {},
-  });
-
-  if (!res.ok) {
-    if (res.status === 401) throw new Error("Unauthorized: Please log in");
-    throw new Error("Failed to fetch experiences");
-  }
-
+  const res = await fetch(ENDPOINT); // ✅ no credentials
+  if (!res.ok) throw new Error("Failed to fetch experiences");
   return res.json();
 }
 
-/**
- * ✅ Add new experience (requires JWT)
- */
+ //Add new experience (CSRF + JWT protection)
 export async function addExperience(
   experience: Omit<Experience, "id">
 ): Promise<Experience> {
-  const token = getAuthToken();
+  const csrfToken = await getCsrfToken();
+
   const res = await fetch(ENDPOINT, {
     method: "POST",
+    credentials: "include", // include cookies (JWT + CSRF cookie)
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      "X-CSRF-TOKEN": csrfToken || "",
     },
     body: JSON.stringify(experience),
   });
 
   if (!res.ok) {
     if (res.status === 401) throw new Error("Unauthorized: Please log in");
+    if (res.status === 403) throw new Error("CSRF token invalid");
     throw new Error("Failed to add experience");
   }
 
@@ -62,19 +48,23 @@ export async function addExperience(
 }
 
 /**
- * ✅ Delete experience (requires JWT)
+ * ✅ Delete experience (protected)
  */
 export async function deleteExperience(id: number): Promise<void> {
-  const token = getAuthToken();
+  const csrfToken = await getCsrfToken();
+
   const res = await fetch(`${ENDPOINT}/${id}`, {
     method: "DELETE",
-    headers: token
-      ? { Authorization: `Bearer ${token}` }
-      : {},
+    credentials: "include",
+    headers: {
+      "X-CSRF-TOKEN": csrfToken || "",
+    },
   });
 
   if (!res.ok) {
     if (res.status === 401) throw new Error("Unauthorized: Please log in");
+    if (res.status === 403) throw new Error("CSRF token invalid");
     throw new Error("Failed to delete experience");
   }
 }
+

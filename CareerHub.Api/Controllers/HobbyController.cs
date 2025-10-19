@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CareerHubApi.Data;
 using CareerHubApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareerHubApi.Controllers;
 
@@ -17,6 +18,7 @@ public class HobbyController : ControllerBase
     }
 
     // GET: api/hobby
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Hobby>>> GetHobbies()
     {
@@ -25,6 +27,7 @@ public class HobbyController : ControllerBase
 
     // POST: api/hobby
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Hobby>> CreateHobby(Hobby hobby)
     {
         _context.Hobbies.Add(hobby);
@@ -35,6 +38,7 @@ public class HobbyController : ControllerBase
 
     // DELETE: api/hobby/{id}
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteHobby(int id)
     {
         var exp = await _context.Hobbies.FindAsync(id);

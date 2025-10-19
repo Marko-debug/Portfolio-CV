@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "./apiConfig";
+import { getCsrfToken } from "./authService"
 
 export interface Certification {
   id: number;
@@ -11,28 +12,59 @@ export interface Certification {
 
 const ENDPOINT = `${API_BASE_URL}/certification`;
 
+/**
+ * ✅ Get all certification
+ * - Cookies are sent automatically (if logged in)
+ */
 export async function getCertifications(): Promise<Certification[]> {
-  const res = await fetch(ENDPOINT);
-  if (!res.ok) {
-    throw new Error("Failed to fetch certifications");
-  }
+  const res = await fetch(ENDPOINT); // ✅ no credentials
+  if (!res.ok) throw new Error("Failed to fetch certifications");
   return res.json();
 }
 
-export async function addCertification(certification: Omit<Certification, "id">): Promise<Certification> {
+ //Add new certification (CSRF + JWT protection)
+export async function addCertification(
+  certification: Omit<Certification, "id">
+): Promise<Certification> {
+  const csrfToken = await getCsrfToken();
+
   const res = await fetch(ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    credentials: "include", // include cookies (JWT + CSRF cookie)
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-TOKEN": csrfToken || "",
+    },
     body: JSON.stringify(certification),
   });
-  if (!res.ok) throw new Error("Failed to add certification");
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Unauthorized: Please log in");
+    if (res.status === 403) throw new Error("CSRF token invalid");
+    throw new Error("Failed to certification");
+  }
+
   return res.json();
 }
 
+/**
+ * ✅ Delete certification (protected)
+ */
 export async function deleteCertification(id: number): Promise<void> {
-      const res = await fetch(`${ENDPOINT}/${id}`, {
-        method: "DELETE",
-      });
+  const csrfToken = await getCsrfToken();
 
-      if (!res.ok) throw new Error("Failed to delete certification");
+  const res = await fetch(`${ENDPOINT}/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      "X-CSRF-TOKEN": csrfToken || "",
+    },
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Unauthorized: Please log in");
+    if (res.status === 403) throw new Error("CSRF token invalid");
+    throw new Error("Failed to delete certification");
+  }
 }
+

@@ -146,3 +146,12 @@ C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\obj\Debug\net9.0\C
 C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\obj\Debug\net9.0\CareerHub.Api.genruntimeconfig.cache
 C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\obj\Debug\net9.0\ref\CareerHub.Api.dll
 C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\obj\Debug\net9.0\CareerHub.Api.sourcelink.json
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Newtonsoft.Json.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Newtonsoft.Json.Bson.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Scrutor.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Users\Marek\Desktop\Ja\My Projects\CareerHub\CareerHub.Api\bin\Debug\net9.0\Swashbuckle.AspNetCore.Newtonsoft.dll

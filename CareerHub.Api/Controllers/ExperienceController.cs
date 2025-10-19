@@ -18,6 +18,7 @@ public class ExperienceController : ControllerBase
     }
 
     // GET: api/experience
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Experience>>> GetExperiences()
     {

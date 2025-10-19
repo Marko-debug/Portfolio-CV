@@ -21,33 +21,29 @@ namespace CareerHubApi.Controllers
         }
 
         [HttpPost]
-        [RequestSizeLimit(10_000_000)]
-        public async Task<IActionResult> UpdateProfile([FromForm] IFormFile? file, [FromForm] string? position)
+        [RequestSizeLimit(10_000_000)] // 10 MB
+        public async Task<IActionResult> UpdateProfile([FromForm] ProfileUploadDto dto)
         {
-            // ✅ Correctly extract user ID from JWT
-            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub);
-            if (userIdClaim == null)
-                return Unauthorized("Missing user ID in token.");
+            var profile = await _context.Profiles.FirstOrDefaultAsync();
 
-            int userId = int.Parse(userIdClaim.Value);
-
-            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
             if (profile == null)
-            {
-                profile = new Profile { UserId = userId };
-                _context.Profiles.Add(profile);
-            }
+                profile = new Profile();
 
-            if (file != null)
+            if (dto.File != null)
             {
                 using var ms = new MemoryStream();
-                await file.CopyToAsync(ms);
+                await dto.File.CopyToAsync(ms);
                 profile.Photo = ms.ToArray();
-                profile.PhotoType = file.ContentType;
+                profile.PhotoType = dto.File.ContentType;
             }
 
-            if (!string.IsNullOrEmpty(position))
-                profile.Position = position;
+            if (!string.IsNullOrEmpty(dto.Position))
+                profile.Position = dto.Position;
+
+            if (profile.Id == 0)
+                _context.Profiles.Add(profile);
+            else
+                _context.Profiles.Update(profile);
 
             await _context.SaveChangesAsync();
 

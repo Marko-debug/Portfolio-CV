@@ -17,6 +17,9 @@ namespace CareerHubApi.Data
         public DbSet<Hobby> Hobbies { get; set; }
         public DbSet<Certification> Certifications { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<RevokedToken> RevokedTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

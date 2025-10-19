@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CareerHubApi.Data;
 using CareerHubApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareerHubApi.Controllers;
 
@@ -17,6 +18,7 @@ public class SkillController : ControllerBase
     }
 
     // GET: api/skill
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
     {
@@ -25,6 +27,7 @@ public class SkillController : ControllerBase
 
     // POST: api/skill
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Skill>> CreateSkill(Skill skill)
     {
         _context.Skills.Add(skill);
@@ -35,6 +38,7 @@ public class SkillController : ControllerBase
 
     // DELETE: api/skill/{id}
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteSkill(int id)
     {
         var exp = await _context.Skills.FindAsync(id);

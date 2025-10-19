@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CareerHubApi.Data;
 using CareerHubApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareerHubApi.Controllers;
 
@@ -17,6 +18,7 @@ public class LanguageController : ControllerBase
     }
 
     // GET: api/language
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Language>>> GetLanguages()
     {
@@ -25,6 +27,7 @@ public class LanguageController : ControllerBase
 
     // POST: api/language
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Language>> CreateLanguage(Language language)
     {
         _context.Languages.Add(language);
@@ -35,6 +38,7 @@ public class LanguageController : ControllerBase
 
     // DELETE: api/language/{id}
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteLanguage(int id)
     {
         var exp = await _context.Languages.FindAsync(id);

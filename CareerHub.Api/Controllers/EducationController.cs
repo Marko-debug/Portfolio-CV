@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CareerHubApi.Data;
 using CareerHubApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CareerHubApi.Controllers;
 
@@ -17,6 +18,7 @@ public class EducationController : ControllerBase
     }
 
     // GET: api/education
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Education>>> GetEducations()
     {
@@ -25,6 +27,7 @@ public class EducationController : ControllerBase
 
     // POST: api/education
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Education>> CreateEducation(Education education)
     {
         _context.Educations.Add(education);
@@ -35,6 +38,7 @@ public class EducationController : ControllerBase
 
     // DELETE: api/education/{id}
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteEducation(int id)
     {
         var exp = await _context.Educations.FindAsync(id);

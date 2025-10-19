@@ -1,42 +1,46 @@
+// src/context/AuthContext.tsx
 import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { checkAuth, logout, refreshToken } from "../services/authService";
 
 interface AuthContextType {
-  token: string | null;
-  isLoggedIn: boolean;
-  login: (token: string) => void;
-  logout: () => void;
+  isAuthenticated: boolean;
+  setIsAuthenticated: (value: boolean) => void;
+  logoutUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  token: null,
-  isLoggedIn: false,
-  login: () => {},
-  logout: () => {},
+  isAuthenticated: false,
+  setIsAuthenticated: () => {},
+  logoutUser: async () => {},
 });
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
-
-  const login = (newToken: string) => {
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-  };
-
-  const isLoggedIn = !!token;
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("token");
-    if (stored) setToken(stored);
+    (async () => {
+      const ok = await checkAuth();
+      setIsAuthenticated(ok);
+    })();
+
+    // optional auto-refresh every 10 min
+    const interval = setInterval(async () => {
+      const refreshed = await refreshToken();
+      if (refreshed) setIsAuthenticated(true);
+    //}, 10 * 60 * 1000); // 10 min
+    }, 55 * 1000); // 55 sec
+
+    return () => clearInterval(interval);
   }, []);
 
+  const logoutUser = async () => {
+    await logout();
+    setIsAuthenticated(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ token, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, logoutUser }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CareerHub.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251015201935_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251018200616_addRevokedToken")]
+    partial class addRevokedToken
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,6 +192,40 @@ namespace CareerHub.Api.Migrations
                     b.ToTable("Profiles");
                 });
 
+            modelBuilder.Entity("CareerHubApi.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Revoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("CareerHubApi.Models.Skill", b =>
                 {
                     b.Property<int>("Id")
@@ -237,6 +271,29 @@ namespace CareerHub.Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("RevokedToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Jti")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RevokedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RevokedTokens");
+                });
+
             modelBuilder.Entity("CareerHubApi.Models.Profile", b =>
                 {
                     b.HasOne("CareerHubApi.Models.User", "User")
@@ -248,9 +305,22 @@ namespace CareerHub.Api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CareerHubApi.Models.RefreshToken", b =>
+                {
+                    b.HasOne("CareerHubApi.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CareerHubApi.Models.User", b =>
                 {
                     b.Navigation("Profile");
+
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

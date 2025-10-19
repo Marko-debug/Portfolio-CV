@@ -11,7 +11,7 @@ import { getCertifications } from "../services/certificationService";
 import { getLanguages } from "../services/languageService";
 
 export default function SidebarMenu() {
-  const { isLoggedIn, logout } = useContext(AuthContext);
+  const { isAuthenticated, logoutUser } = useContext(AuthContext);
   const [active, setActive] = useState<string | null>(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showMetrics, setShowMetrics] = useState(false);
@@ -23,6 +23,7 @@ export default function SidebarMenu() {
     languages: 0,
   });
 
+  // ✅ Load metrics on mount
   useEffect(() => {
     async function loadMetrics() {
       try {
@@ -42,7 +43,6 @@ export default function SidebarMenu() {
         console.error("Error loading metrics:", error);
       }
     }
-
     loadMetrics();
   }, []);
 
@@ -57,7 +57,7 @@ export default function SidebarMenu() {
       <div className="fixed left-0 top-0 h-screen w-14 bg-white border-r border-gray-200 flex flex-col items-center justify-between shadow-sm py-4">
         {/* Top section */}
         <div className="flex flex-col items-center space-y-4">
-          {!isLoggedIn ? (
+          {!isAuthenticated ? (
             <button
               onClick={() => handleOpen("login")}
               className={`flex flex-col items-center text-[11px] font-medium transition-all ${
@@ -71,7 +71,7 @@ export default function SidebarMenu() {
             </button>
           ) : (
             <button
-              onClick={logout}
+              onClick={logoutUser}
               className="flex flex-col items-center text-[11px] font-medium text-gray-500 hover:text-red-600 transition-all"
             >
               <LogOut className="w-5 h-5 mb-0.5" />

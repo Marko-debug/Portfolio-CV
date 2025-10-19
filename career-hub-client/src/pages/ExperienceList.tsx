@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import {
   getExperiences,
   deleteExperience,
@@ -11,17 +12,19 @@ import RemoveButton from "../components/modals/RemoveButton";
 import AddExperienceModal from "../components/modals/AddExperienceModal";
 
 export default function ExperienceList() {
+  const { isAuthenticated } = useContext(AuthContext);
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // ✅ Load experiences
+  // ✅ Load data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getExperiences();
         setExperiences(data);
+        setError(null);
       } catch (err: any) {
         if (err.message.includes("Unauthorized")) {
           setError("Please log in to view your experiences.");
@@ -36,13 +39,11 @@ export default function ExperienceList() {
     fetchData();
   }, []);
 
-  // ✅ Open modal
+  // ✅ Add new experience
   const handleAdd = () => setShowAddModal(true);
 
-  // ✅ After saving a new experience
-  const handleSave = (newExp: Experience) => {
+  const handleSave = (newExp: Experience) =>
     setExperiences((prev) => [...prev, newExp]);
-  };
 
   // ✅ Delete experience
   const handleRemove = async (id: number) => {
@@ -66,12 +67,14 @@ export default function ExperienceList() {
       <div className="space-y-3">
         {experiences.map((exp) => (
           <HoverCard key={exp.id}>
-            {/* Remove Button */}
-            <div className="absolute top-3 right-4">
-              <RemoveButton onConfirm={() => handleRemove(exp.id)} />
-            </div>
+            {/* ✅ Show Remove button only when authenticated */}
+            {isAuthenticated && (
+              <div className="absolute top-3 right-4">
+                <RemoveButton onConfirm={() => handleRemove(exp.id)} />
+              </div>
+            )}
 
-            {/* Content */}
+            {/* Experience details */}
             <div>
               <h3 className="font-medium text-gray-900">{exp.title}</h3>
               <p className="text-indigo-600 font-medium mt-1">{exp.company}</p>
@@ -84,6 +87,7 @@ export default function ExperienceList() {
           </HoverCard>
         ))}
 
+        {/* ✅ Show message when no experiences */}
         {experiences.length === 0 && (
           <p className="text-center text-gray-500 mt-3">
             No work experiences yet.
@@ -91,10 +95,12 @@ export default function ExperienceList() {
         )}
       </div>
 
-      {/* Add button */}
-      <div className="flex justify-end mt-6">
-        <AddButton label="Add Work Experience" onClick={handleAdd} />
-      </div>
+      {/* ✅ Show Add button only when logged in */}
+      {isAuthenticated && (
+        <div className="flex justify-end mt-6">
+          <AddButton label="Add Work Experience" onClick={handleAdd} />
+        </div>
+      )}
 
       {/* Modal */}
       {showAddModal && (
