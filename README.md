@@ -1,52 +1,37 @@
-# 🚀 CareerHub – Full-Stack Portfolio & Career Management App
+# 🚀 Full-Stack Portfolio & Career Management App
 
-CareerHub is a **secure full-stack portfolio application** built with:
+CareerHub is a **secure, multilingual full-stack portfolio application** built with:
 
-- **Frontend:** React + TypeScript + Tailwind
-- **Backend:** ASP.NET Core Web API (.NET 8, C#)
+- **Frontend:** Next.js 14 (React + TypeScript + TailwindCSS + i18next)
+- **Backend:** ASP.NET Core Web API (.NET 9, C#)
 - **Database:** PostgreSQL (EF Core)
 - **Auth:** JWT with Refresh Tokens in HttpOnly Cookies + CSRF Protection
 
 ---
 
-## 🧩 Table of Contents
-
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Backend Setup](#backend-setup)
-- [Frontend Setup](#frontend-setup)
-- [Authentication & Security](#authentication--security)
-- [Environment Variables](#environment-variables)
-- [Best Practices](#best-practices)
-- [Deployment Notes](#deployment-notes)
-- [License](#license)
-
----
-
 ## 🧭 Project Overview
 
-CareerHub lets you create and manage your professional profile, including:
+CareerHub lets you create and manage your professional portfolio and CV online:
 
 - **Profile photo & position**
-- **Experience**, **skills**, **certifications**, **education**, and **languages**
+- **Experiences**, **education**, **skills**, **certifications**, and **languages**
+- **Dynamic language switching (EN ↔ DE)**
 - **Metrics dashboard**
 - Secure **authentication with refresh tokens**
-- Fully responsive React UI
+- Fully responsive, SSR-optimized UI
 
 ---
 
 ## ⚙️ Features
 
-✅ JWT + Refresh Token Authentication  
-✅ HttpOnly Secure Cookies  
-✅ CSRF Protection (Double Submit Cookie pattern)  
-✅ Role-based visibility (buttons visible only for logged-in users)  
-✅ Token rotation on refresh  
-✅ Auto-relogin using refresh token  
-✅ EF Core + PostgreSQL ORM  
-✅ Swagger API documentation  
-✅ CORS configured for secure cross-origin frontend
+✅ Next.js 14 App Router + TypeScript
+✅ i18next for static & dynamic translations
+✅ JWT + Refresh Token Authentication
+✅ HttpOnly Cookies + CSRF Protection
+✅ EF Core (PostgreSQL) ORM
+✅ Swagger API documentation
+✅ CORS configured for secure frontend communication
+✅ Clean modular architecture
 
 ---
 
@@ -54,192 +39,133 @@ CareerHub lets you create and manage your professional profile, including:
 
 ```
 CareerHub/
- ├── CareerHub.Api/                 # ASP.NET Core backend
- │   ├── Controllers/               # API endpoints
- │   ├── Models/                    # EF entities (User, Profile, etc.)
- │   ├── Data/                      # AppDbContext + migrations
- │   ├── appsettings.json           # Configuration
- │   └── Program.cs                 # Entry point
+ ├── CareerHub.Api/                # ASP.NET Core backend
+ │   ├── Controllers/              # API endpoints
+ │   ├── Models/                   # EF entities (User, Profile, etc.)
+ │   ├── Data/                     # AppDbContext + migrations
+ │   ├── appsettings.json          # Configuration
+ │   └── Program.cs                # Entry point
  │
- └── careerhub-frontend/            # React + Vite frontend
-     ├── src/
-     │   ├── context/AuthContext.tsx
-     │   ├── services/              # API calls
-     │   ├── components/            # UI components
-     │   └── pages/
-     └── .env                       # Frontend API base URL
+ └── frontend/                     # Next.js 14 (TypeScript) frontend
+     ├── app/                      # App Router pages (SSR & client)
+     ├── components/               # UI components
+     ├── context/                  # React contexts (Auth, Theme, etc.)
+     ├── services/                 # API calls → ASP.NET Core
+     ├── i18n/                     # Translation config + JSON files
+     ├── public/                   # Static assets and images
+     ├── .env                      # NEXT_PUBLIC_API_BASE_URL setting
+     └── next.config.mjs           # Next.js configuration
 ```
 
----
+## 💻 Frontend Setup (Next.js)
 
-## 🧱 Backend Setup
+### 1️⃣ Environment variables
 
-### 1. Prerequisites
+Create `frontend/.env.local`:
 
-- .NET 8 SDK
-- PostgreSQL (running locally or in Docker)
-- Node.js 18+
-
-### 2. Configure Environment
-
-Edit `appsettings.json` or use secrets:
-
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Host=localhost;Database=CareerHub;Username=postgres;Password=yourpassword"
-},
-"Jwt": {
-  "Key": "super_secret_key_here",
-  "Issuer": "https://localhost:5058",
-  "Audience": "https://localhost:5058"
-}
+```
+NEXT_PUBLIC_API_BASE_URL=https://localhost:7119/api
 ```
 
-### 3. Run Database Migrations
+### 2️⃣ Install & Run
 
 ```bash
-cd CareerHub.Api
-dotnet ef database update
-```
-
-### 4. Launch API
-
-```bash
-dotnet watch run
-```
-
-Backend runs on **https://localhost:5058**
-
----
-
-## 💻 Frontend Setup
-
-### 1. Configure Environment
-
-Create `frontend/.env`:
-
-```
-VITE_API_BASE_URL=https://localhost:5058/api
-```
-
-### 2. Install & Run
-
-```bash
-cd careerhub-frontend
+cd frontend
 npm install
 npm run dev
 ```
 
-Frontend runs on **https://localhost:3000**
+Frontend runs at **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## 🌍 Internationalization (i18n)
+
+Implemented via [i18next](https://www.i18next.com/) + `react-i18next`.
+
+- Translation files stored in `frontend/i18n/locales/{en,de}/translation.json`
+- Language switch via country flag buttons (🇬🇧 → EN, 🇩🇪 → DE)
+- SSR-safe initialization in `frontend/i18n/index.ts`
+- Dynamic translations for API data coming soon (backend multi-language fields)
 
 ---
 
 ## 🔐 Authentication & Security
 
-### 🧠 Overview
+### Overview
 
-Authentication uses:
+- **Access Token (JWT)** – short-lived, HttpOnly cookie
+- **Refresh Token** – long-lived, HttpOnly cookie
+- **Token rotation** – each refresh invalidates previous token
 
-- **Access Token (JWT)** – short-lived (~15 min), stored in **HttpOnly Secure Cookie**
-- **Refresh Token** – long-lived (~7 days), also HttpOnly cookie
-- **Token rotation** – each refresh invalidates the previous refresh token
+### Flow
 
-### 🔁 Token Flow
-
-1. **Login**
-
-   - Client posts `/api/auth/login` with credentials
-   - Server verifies user and issues `jwt` and `refreshToken` cookies
-   - Frontend stores **no tokens in JS**, only relies on cookies
-
-2. **Authenticated requests**
-
-   - Browser automatically includes cookies
-   - JWT middleware validates JWT
-   - On expiry → backend returns 401
-
-3. **Auto-refresh**
-
-   - Frontend periodically calls `/api/auth/refresh`
-   - New JWT + rotated refresh token returned
-
-4. **Logout**
-   - Frontend calls `/api/auth/logout`
-   - Server deletes both cookies and revokes refresh token
-
-### 🧱 Cookie Security
-
-```csharp
-new CookieOptions
-{
-    HttpOnly = true,
-    Secure = true,
-    SameSite = SameSiteMode.None,
-    Path = "/",
-    Expires = DateTime.UtcNow.AddMinutes(minutes)
-};
-```
-
-| Setting         | Description                                                          |
-| --------------- | -------------------------------------------------------------------- |
-| `HttpOnly`      | Prevents JS access (protects against XSS)                            |
-| `Secure`        | Sends cookie only over HTTPS                                         |
-| `SameSite=None` | Allows cross-site requests (for frontend–backend on different ports) |
-| `Expires`       | Defines lifetime (short for JWT, longer for refresh)                 |
+1️⃣ **Login:**
+`/api/auth/login` → sets secure cookies
+2️⃣ **Authenticated requests:**
+Cookies sent automatically
+3️⃣ **Auto-refresh:**
+`/api/auth/refresh` renews tokens
+4️⃣ **Logout:**
+`/api/auth/logout` clears cookies
 
 ---
 
 ## 🛡 CSRF Protection
 
-Implements **Double-Submit Cookie pattern**:
+Implements the **Double-Submit Cookie** pattern:
 
-- Backend sets a `CSRF-TOKEN` cookie (non-HttpOnly)
-- Frontend reads it and sends it in a custom header `X-CSRF-TOKEN`
-- Backend validates that header value matches the cookie
-
-**Exempt endpoints:** `/auth/login` and `/auth/register`
+- Backend issues `CSRF-TOKEN` cookie
+- Frontend sends `X-CSRF-TOKEN` header
+- Backend verifies match before state-changing requests
 
 ---
 
 ## 🔒 Environment Variables
 
-| Key                                   | Description                       |
-| ------------------------------------- | --------------------------------- |
-| `Jwt:Key`                             | Strong random secret (≥ 256 bits) |
-| `Jwt:Issuer`                          | Token issuer                      |
-| `Jwt:Audience`                        | Token audience                    |
-| `ConnectionStrings:DefaultConnection` | PostgreSQL connection             |
-| `ASPNETCORE_ENVIRONMENT`              | `Development` / `Production`      |
+| Key                                   | Description                     |
+| ------------------------------------- | ------------------------------- |
+| `Jwt:Key`                             | Strong 256-bit secret           |
+| `Jwt:Issuer`                          | Token issuer URL                |
+| `Jwt:Audience`                        | Token audience URL              |
+| `ConnectionStrings:DefaultConnection` | PostgreSQL string               |
+| `ASPNETCORE_ENVIRONMENT`              | `Development` or `Production`   |
+| `NEXT_PUBLIC_API_BASE_URL`            | Base URL for frontend API calls |
 
 ---
 
 ## 💡 Best Practices
 
-✅ Short JWT lifetime and refresh rotation  
-✅ Hash refresh tokens in DB  
-✅ Revoke old refresh tokens on logout  
-✅ HttpOnly + Secure cookies — never use localStorage  
-✅ CSRF protection for state-changing requests  
-✅ BCrypt password hashing  
-✅ Use HTTPS always  
-✅ Limit CORS origins  
-✅ Track revoked tokens (blocklist)  
-✅ Use EF Core migrations  
-✅ Handle 401 in frontend gracefully
+✅ Short-lived JWT + rotating refresh tokens
+✅ Hash refresh tokens in DB
+✅ `HttpOnly + Secure` cookies (no localStorage)
+✅ CSRF protection for mutations
+✅ Strong password hashing (BCrypt)
+✅ HTTPS enforced
+✅ Strict CORS origins
+✅ EF Core migrations tracked
+✅ Graceful 401 handling in frontend
 
 ---
 
 ## 🚀 Deployment Notes
 
-**Frontend:**
+**Frontend (Next.js):**
 
-- Serve via HTTPS (Vercel, Netlify, or Nginx + TLS)
-- Set `VITE_API_BASE_URL` to your backend domain
+- Deploy via Vercel, Netlify, or Nginx + TLS
+- Set `NEXT_PUBLIC_API_BASE_URL` to backend URL
+- Use HTTPS always
 
-**Backend:**
+**Backend (.NET API):**
 
-- Use HTTPS reverse proxy (Nginx)
-- Set `Secure = true` for cookies
+- Serve behind HTTPS reverse proxy
+- Enable HSTS and CORS
 - Rotate `Jwt:Key` periodically
-- Use a 32+ byte signing key
-- Add HSTS and proper CORS rules
+- Use 32+ byte signing key
+
+---
+
+## 📜 License
+
+MIT License © 2025 Marek Orihel
+All rights reserved.
