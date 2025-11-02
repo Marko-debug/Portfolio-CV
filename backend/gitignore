@@ -1,0 +1,8 @@
+# Ignore appsettings files (contain secrets)
+
+**/appsettings.json
+**/appsettings.Development.json
+
+# Optional: ignore user secrets or local settings
+
+\*_/appsettings._.local.json

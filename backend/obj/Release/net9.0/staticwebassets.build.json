@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "OvI5NOX2kYLvJuJ+MoC8ECk7asd1eD0eW1ZoS3KQ2xU=",
+  "Source": "CareerHub.Api",
+  "BasePath": "_content/CareerHub.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

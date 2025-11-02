@@ -1,0 +1,23 @@
+{
+  "About Me": "Über mich",
+  "My Projects": "Meine Projekte",
+  "Experiences": "Berufserfahrung",
+  "Education": "Ausbildung",
+  "Skills": "Fähigkeiten",
+  "Languages": "Sprachen",
+  "Certifications": "Zertifikate",
+  "Hobbies": "Hobbys",
+
+  "all Rights Reserved": "Alle Rechte vorbehalten.",
+  "Crafted By": "Erstellt von",
+  "Metrics": "Metriken",
+
+  "Log In": "Anmelden",
+  "Sign In": "Einloggen",
+  "Email": "E-Mail",
+  "Password": "Passwort",
+  "Forgot Password": "Passwort vergessen?",
+  "years Old": "Jahre alt",
+
+  "About Me Text": "Ich bin ein leidenschaftlicher Frontend- und .NET-Entwickler, der gerne saubere, effiziente und skalierbare Softwarelösungen erstellt. Ich liebe es, schöne Benutzeroberflächen zu entwickeln, Benutzererlebnisse zu verbessern und ständig neue Technologien zu erlernen, um in der modernen Webentwicklung auf dem neuesten Stand zu bleiben."
+}
