@@ -17,7 +17,7 @@ export default function ProjectsList() {
       title: "Portfolio",
       description:
         "Personal CV and career management platform built with React, Tailwind, and .NET backend.",
-      link: "https://github.com/Marko-debug/Portfolio-CV",
+      link: "https://github.com",
     },
     {
       id: 2,

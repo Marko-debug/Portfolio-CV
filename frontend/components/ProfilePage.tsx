@@ -74,9 +74,9 @@ export default function ProfilePage() {
         <p className="flex items-center justify-center gap-2">
           <Mail size={16} className="text-indigo-600" /> {email}
         </p>
-        <p className="flex items-center justify-center gap-2">
+        {/* <p className="flex items-center justify-center gap-2">
           <Phone size={16} className="text-indigo-600" /> {phone}
-        </p>
+        </p> */}
         <p className="flex items-center justify-center gap-2">
           <Calendar size={16} className="text-indigo-600" /> {age} {t("years Old")}
         </p>

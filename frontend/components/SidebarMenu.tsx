@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { LogIn, LogOut, BarChart2 } from "lucide-react";
@@ -47,6 +49,19 @@ export default function SidebarMenu() {
     }
     loadMetrics();
   }, []);
+
+  // ✅ Disable background scroll when modal is open
+  useEffect(() => {
+    if (showLogin || showMetrics) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"; // Cleanup when unmounted
+    };
+  }, [showLogin, showMetrics]);
 
   const handleOpen = (type: string) => {
     setActive(type);

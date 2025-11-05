@@ -19,7 +19,7 @@ export default function MetricsModal({ onClose, metrics }: MetricsModalProps) {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex justify-center items-center z-[9999]">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8 relative border border-gray-100 animate-fadeIn">
         {/* Close button */}
         <button

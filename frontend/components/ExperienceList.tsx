@@ -66,7 +66,7 @@ export default function ExperienceList() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <Card title={t("Experiences")}>
+    <Card title={t("xperience")}>
       <div className="space-y-3">
         {experiences.map((exp) => (
           <HoverCard key={exp.id}>
