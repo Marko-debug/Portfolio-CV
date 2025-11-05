@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CareerHub.Api.Migrations
+namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20251017233817_InitialRebuild")]

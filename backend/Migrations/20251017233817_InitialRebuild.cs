@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CareerHub.Api.Migrations
+namespace backend.Migrations
 {
     /// <inheritdoc />
     public partial class InitialRebuild : Migration

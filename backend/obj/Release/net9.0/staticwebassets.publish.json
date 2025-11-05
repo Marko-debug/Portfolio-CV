@@ -1,8 +1,8 @@
 {
   "Version": 1,
   "Hash": "9mqmP2pI89ZUdGL892WUUw736NyUpvZOMp0jwPrGm/8=",
-  "Source": "CareerHub.Api",
-  "BasePath": "_content/CareerHub.Api",
+  "Source": "backend",
+  "BasePath": "_content/backend",
   "Mode": "Default",
   "ManifestType": "Publish",
   "ReferencedProjectsConfiguration": [],
