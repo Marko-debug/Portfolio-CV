@@ -4174,9 +4174,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marek\\Desktop\\Ja\\My Projects\\CareerHub\\backend\\CareerHub.Api.csproj",
-      "projectName": "CareerHub.Api",
-      "projectPath": "C:\\Users\\Marek\\Desktop\\Ja\\My Projects\\CareerHub\\backend\\CareerHub.Api.csproj",
+      "projectUniqueName": "C:\\Users\\Marek\\Desktop\\Ja\\My Projects\\CareerHub\\backend\\backend.csproj",
+      "projectName": "backend",
+      "projectPath": "C:\\Users\\Marek\\Desktop\\Ja\\My Projects\\CareerHub\\backend\\backend.csproj",
       "packagesPath": "C:\\Users\\Marek\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Marek\\Desktop\\Ja\\My Projects\\CareerHub\\backend\\obj\\",
       "projectStyle": "PackageReference",
