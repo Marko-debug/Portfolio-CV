@@ -39,7 +39,7 @@ CareerHub lets you create and manage your professional portfolio and CV online:
 
 ```
 CareerHub/
- ├── CareerHub.Api/                # ASP.NET Core backend
+ ├── backend/                # ASP.NET Core backend
  │   ├── Controllers/              # API endpoints
  │   ├── Models/                   # EF entities (User, Profile, etc.)
  │   ├── Data/                     # AppDbContext + migrations
