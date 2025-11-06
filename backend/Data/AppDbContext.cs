@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using CareerHubApi.Models;
+using backend.Models;
 
-namespace CareerHubApi.Data
+namespace backend.Data
 {
     public class AppDbContext : DbContext
     {

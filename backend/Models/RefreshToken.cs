@@ -1,5 +1,5 @@
 // Models/RefreshToken.cs
-namespace CareerHubApi.Models
+namespace backend.Models
 {
     public class RefreshToken
     {

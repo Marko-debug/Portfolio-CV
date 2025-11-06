@@ -1,5 +1,5 @@
-using CareerHubApi.Data;
-using CareerHubApi.Models;
+using backend.Data;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +10,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
 
-namespace CareerHubApi.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CareerHubApi.Data;
-using CareerHubApi.Models;
+using backend.Data;
+using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CareerHubApi.Controllers;
+namespace backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

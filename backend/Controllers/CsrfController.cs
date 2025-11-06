@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 
-namespace CareerHubApi.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

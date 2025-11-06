@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using CareerHubApi.Data;
-using CareerHubApi.Models;
+using backend.Data;
+using backend.Models;
 
-namespace CareerHubApi.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

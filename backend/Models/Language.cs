@@ -1,4 +1,4 @@
-namespace CareerHubApi.Models;
+namespace backend.Models;
 
 public class Language
 {

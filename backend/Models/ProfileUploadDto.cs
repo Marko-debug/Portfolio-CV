@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace CareerHubApi.Models
+namespace backend.Models
 {
     public class ProfileUploadDto
     {
