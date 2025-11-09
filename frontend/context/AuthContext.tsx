@@ -29,9 +29,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const interval = setInterval(async () => {
       const refreshed = await refreshToken();
       if (refreshed) setIsAuthenticated(true);
-    //}, 10 * 60 * 1000); // 10 min
-    }, 55 * 1000); // 55 sec
+    }, 15 * 60 * 1000); // 15 min
+    //}, 55 * 1000); // 55 sec
 
+
+
+    
     return () => clearInterval(interval);
   }, []);
 
