@@ -68,7 +68,7 @@ export default function CertificationList() {
             key={cert.id}
             className="relative bg-[#222227] border border-gray-700 rounded-xl p-5 transition-all duration-200 hover:border-purple-500 hover:shadow-md"
           >
-            {/* ✅ Show Remove button only when authenticated */}
+            {/* ✅ Remove button */}
             {isAuthenticated && (
               <div className="absolute top-3 right-4">
                 <RemoveButton onConfirm={() => handleRemove(cert.id)} />
@@ -82,9 +82,22 @@ export default function CertificationList() {
               </h3>
               <p className="text-purple-400 font-medium mt-1">{cert.issuer}</p>
 
+              {/* ✅ Clickable link */}
               {cert.description && (
-                <p className="text-gray-300 mt-2 leading-relaxed">
-                  {cert.description}
+                <p className="text-sm text-gray-300 mt-2">
+                  {" "}
+                  <a
+                    href={
+                      cert.description.startsWith("http")
+                        ? cert.description
+                        : `https://${cert.description}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-400 hover:text-purple-300 underline transition-colors"
+                  >
+                    View Detail
+                  </a>
                 </p>
               )}
 
@@ -96,7 +109,7 @@ export default function CertificationList() {
           </HoverCard>
         ))}
 
-        {/* ✅ Show message when empty */}
+        {/* Empty message */}
         {certifications.length === 0 && (
           <p className="text-center text-gray-500 mt-3">
             No certifications yet.
@@ -104,14 +117,14 @@ export default function CertificationList() {
         )}
       </div>
 
-      {/* ✅ Add Button (only for logged-in users) */}
+      {/* Add button */}
       {isAuthenticated && (
         <div className="flex justify-end mt-6">
           <AddButton label="Add Certification" onClick={handleAdd} />
         </div>
       )}
 
-      {/* ✅ Modal */}
+      {/* Modal */}
       {showAddModal && (
         <AddCertificationModal
           onClose={() => setShowAddModal(false)}
