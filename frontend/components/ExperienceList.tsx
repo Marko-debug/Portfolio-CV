@@ -20,7 +20,6 @@ export default function ExperienceList() {
   const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // ✅ Load data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,52 +36,47 @@ export default function ExperienceList() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // ✅ Add new experience
   const handleAdd = () => setShowAddModal(true);
-
   const handleSave = (newExp: Experience) =>
     setExperiences((prev) => [...prev, newExp]);
 
-  // ✅ Delete experience
   const handleRemove = async (id: number) => {
     try {
       await deleteExperience(id);
-      // Update the UI after backend confirms deletion
       setExperiences((prev) => prev.filter((exp) => exp.id !== id));
     } catch (err: any) {
-      if (err.message.includes("Unauthorized")) {
-        alert("Your session expired. Please log in again.");
-      } else {
-        alert("Error deleting experience");
-      }
+      alert(
+        err.message.includes("Unauthorized")
+          ? "Your session expired. Please log in again."
+          : "Error deleting experience"
+      );
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <p className="text-gray-400">Loading...</p>;
+  if (error) return <p className="text-red-400">{error}</p>;
 
   return (
-    <Card title={t("xperience")}>
-      <div className="space-y-3">
+    <Card title={t("Experience")} className="bg-[#1a1a1d] text-gray-200 border border-gray-700 rounded-2xl shadow-lg">
+      <div className="space-y-4">
         {experiences.map((exp) => (
-          <HoverCard key={exp.id}>
-            {/* ✅ Show Remove button only when authenticated */}
+          <HoverCard
+            key={exp.id}
+            className="relative bg-[#222227] border border-gray-700 rounded-xl p-5 transition-all duration-200 hover:border-purple-500 hover:shadow-md"
+          >
             {isAuthenticated && (
               <div className="absolute top-3 right-4">
                 <RemoveButton onConfirm={() => handleRemove(exp.id)} />
               </div>
             )}
-
-            {/* Experience details */}
             <div>
-              <h3 className="font-medium text-gray-900">{exp.title}</h3>
-              <p className="text-indigo-600 font-medium mt-1">{exp.company}</p>
-              <p className="text-gray-700 mt-1">{exp.description}</p>
-              <p className="text-sm text-gray-400 mt-2">
+              <h3 className="font-semibold text-gray-100 text-lg">{exp.title}</h3>
+              <p className="text-purple-400 font-medium mt-1">{exp.company}</p>
+              <p className="text-gray-300 mt-2 leading-relaxed">{exp.description}</p>
+              <p className="text-sm text-gray-500 mt-3">
                 {exp.startDate.split("T")[0]} →{" "}
                 {exp.endDate?.split("T")[0] || "Present"}
               </p>
@@ -90,7 +84,6 @@ export default function ExperienceList() {
           </HoverCard>
         ))}
 
-        {/* ✅ Show message when no experiences */}
         {experiences.length === 0 && (
           <p className="text-center text-gray-500 mt-3">
             No work experiences yet.
@@ -98,14 +91,16 @@ export default function ExperienceList() {
         )}
       </div>
 
-      {/* ✅ Show Add button only when logged in */}
       {isAuthenticated && (
         <div className="flex justify-end mt-6">
-          <AddButton label="Add Work Experience" onClick={handleAdd} />
+          <AddButton
+            label="Add Work Experience"
+            onClick={handleAdd}
+            className="mt-6"
+          />
         </div>
       )}
 
-      {/* Modal */}
       {showAddModal && (
         <AddExperienceModal
           onClose={() => setShowAddModal(false)}

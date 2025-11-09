@@ -8,9 +8,9 @@ interface AddLanguageModalProps {
 
 export default function AddLanguageModal({ onClose, onSave }: AddLanguageModalProps) {
   const [formData, setFormData] = useState({
-    name: "", 
-    proficiency: "", 
-    description: "", 
+    name: "",
+    proficiency: "",
+    description: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -22,7 +22,9 @@ export default function AddLanguageModal({ onClose, onSave }: AddLanguageModalPr
     };
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -42,75 +44,75 @@ export default function AddLanguageModal({ onClose, onSave }: AddLanguageModalPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8 relative border border-gray-200 animate-fadeIn">
+    <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-3 sm:p-6">
+      <div className="bg-[#1a1a1d] rounded-2xl shadow-2xl w-full max-w-lg sm:max-w-2xl md:max-w-3xl p-6 sm:p-8 relative border border-gray-700 animate-fadeIn text-gray-200">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-5 text-gray-400 hover:text-gray-600 text-xl"
+          className="absolute top-4 right-5 text-gray-400 hover:text-gray-200 text-xl transition-colors"
         >
           ✕
         </button>
 
         {/* Header */}
-        <h2 className="text-2xl font-semibold text-indigo-700 mb-6 text-center">
+        <h2 className="text-2xl font-semibold text-purple-400 mb-6 text-center">
           Add Language
         </h2>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-5">
-              <div className="col-span-2 sm:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
-                </label>
-                <input
-                  name="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Ex: Harvard University"
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div className="col-span-2 sm:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Proficiency
-                </label>
-                <input
-                  name="proficiency"
-                  type="text"
-                  required
-                  value={formData.proficiency}
-                  onChange={handleChange}
-                  placeholder="Ex: Bachelor of Science"
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  rows={3}
-                  value={formData.description}
-                  onChange={handleChange}
-                  placeholder="Optional details about your studies..."
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
-                />
-              </div>
+          <div className="grid grid-cols-2 gap-5">
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                Name
+              </label>
+              <input
+                name="name"
+                type="text"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Ex: English, German..."
+                className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              />
             </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                Proficiency
+              </label>
+              <input
+                name="proficiency"
+                type="text"
+                required
+                value={formData.proficiency}
+                onChange={handleChange}
+                placeholder="Ex: Native, Fluent, Intermediate..."
+                className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
+                Description
+              </label>
+              <textarea
+                name="description"
+                rows={3}
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Optional notes about your language skills..."
+                className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
+              />
+            </div>
+          </div>
 
           {/* Buttons */}
           <div className="flex justify-end pt-6">
             <button
               type="submit"
               disabled={saving}
-              className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition text-sm font-medium shadow-sm disabled:opacity-70"
+              className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition text-sm font-medium shadow-md shadow-purple-600/30 disabled:opacity-70"
             >
               {saving ? "Saving..." : "Save"}
             </button>

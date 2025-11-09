@@ -6,7 +6,10 @@ interface AddCertificationModalProps {
   onSave: (newCertification: Certification) => void;
 }
 
-export default function AddCertificationModal({ onClose, onSave }: AddCertificationModalProps) {
+export default function AddCertificationModal({
+  onClose,
+  onSave,
+}: AddCertificationModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     issuer: "",
@@ -25,17 +28,14 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
     };
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleNext = () => {
-    if (step === 1) setStep(2);
-  };
-
-  const handleBack = () => {
-    if (step === 2) setStep(1);
-  };
+  const handleNext = () => setStep(2);
+  const handleBack = () => setStep(1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,18 +53,18 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8 relative border border-gray-200 animate-fadeIn">
+    <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-3 sm:p-6">
+      <div className="bg-[#1a1a1d] rounded-2xl shadow-2xl w-full max-w-lg sm:max-w-2xl md:max-w-3xl p-6 sm:p-8 relative border border-gray-700 animate-fadeIn text-gray-200">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-5 text-gray-400 hover:text-gray-600 text-xl"
+          className="absolute top-4 right-5 text-gray-400 hover:text-gray-200 text-xl transition-colors"
         >
           ✕
         </button>
 
         {/* Header */}
-        <h2 className="text-2xl font-semibold text-indigo-700 mb-6 text-center">
+        <h2 className="text-2xl font-semibold text-purple-400 mb-6 text-center">
           Add Certification
         </h2>
 
@@ -72,14 +72,14 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
         <div className="flex justify-center items-center mb-6 space-x-2">
           <div
             className={`w-2.5 h-2.5 rounded-full ${
-              step === 1 ? "bg-indigo-600" : "bg-gray-300"
+              step === 1 ? "bg-purple-500" : "bg-gray-600"
             }`}
-          ></div>
+          />
           <div
             className={`w-2.5 h-2.5 rounded-full ${
-              step === 2 ? "bg-indigo-600" : "bg-gray-300"
+              step === 2 ? "bg-purple-500" : "bg-gray-600"
             }`}
-          ></div>
+          />
         </div>
 
         {/* Form */}
@@ -88,7 +88,7 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
           {step === 1 && (
             <div className="grid grid-cols-2 gap-5">
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Name
                 </label>
                 <input
@@ -97,13 +97,13 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Ex: Harvard University"
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="Ex: AWS Certified Developer – Associate"
+                  className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
                 />
               </div>
 
               <div className="col-span-2 sm:col-span-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Issuer
                 </label>
                 <input
@@ -112,13 +112,13 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
                   required
                   value={formData.issuer}
                   onChange={handleChange}
-                  placeholder="Ex: Bachelor of Science"
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="Ex: Amazon Web Services"
+                  className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
                 />
               </div>
 
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Description
                 </label>
                 <textarea
@@ -126,8 +126,8 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
                   rows={3}
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Optional details about your studies..."
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                  placeholder="Optional details about this certification..."
+                  className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none"
                 />
               </div>
             </div>
@@ -137,8 +137,8 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
           {step === 2 && (
             <div className="grid grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  DateIssued
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Date Issued
                 </label>
                 <input
                   name="dateIssued"
@@ -146,33 +146,33 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
                   required
                   value={formData.dateIssued}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 focus:outline-none focus:ring-1 focus:ring-purple-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  ExpirationDate
+                <label className="block text-sm font-medium text-gray-300 mb-1">
+                  Expiration Date
                 </label>
                 <input
                   name="expirationDate"
                   type="date"
                   value={formData.expirationDate}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full border border-gray-700 bg-[#222227] rounded-lg p-2.5 text-sm text-gray-100 focus:outline-none focus:ring-1 focus:ring-purple-500"
                 />
               </div>
             </div>
           )}
 
           {/* Buttons */}
-          <div className="flex justify-between pt-6">
+          <div className="flex justify-between pt-6 flex-wrap gap-3 sm:flex-nowrap">
             <div>
               {step === 2 && (
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition text-sm font-medium"
+                  className="px-4 py-2 rounded-lg bg-[#222227] text-gray-300 hover:bg-[#2f2f35] transition text-sm font-medium border border-gray-700"
                 >
                   Back
                 </button>
@@ -180,12 +180,11 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
             </div>
 
             <div className="flex space-x-3">
-
               {step === 1 && (
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition text-sm font-medium"
+                  className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition text-sm font-medium shadow-md shadow-purple-600/30"
                 >
                   Next
                 </button>
@@ -195,7 +194,7 @@ export default function AddCertificationModal({ onClose, onSave }: AddCertificat
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition text-sm font-medium shadow-sm disabled:opacity-70"
+                  className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition text-sm font-medium shadow-md shadow-purple-600/30 disabled:opacity-70"
                 >
                   {saving ? "Saving..." : "Save"}
                 </button>

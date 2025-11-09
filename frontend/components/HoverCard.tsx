@@ -2,18 +2,18 @@ import React, { ReactNode } from "react";
 
 interface HoverCardProps {
   children: ReactNode;
+  className?: string; // ✅ allow custom styling
 }
 
-export default function HoverCard({ children }: HoverCardProps) {
+export default function HoverCard({ children, className }: HoverCardProps) {
   return (
     <div
-      className="relative cursor-pointer flex justify-between items-center p-5 rounded-2xl border border-gray-200 bg-white
-                 transition-all duration-200 ease-in-out
-                 hover:border-indigo-500 hover:bg-indigo-50 hover:shadow-md"
+      className={`relative cursor-pointer flex flex-col justify-between items-start p-5 rounded-2xl 
+                  border border-gray-700 bg-[#222227] 
+                  transition-all duration-200 ease-in-out
+                  hover:border-purple-500 hover:shadow-md hover:shadow-purple-500/10 ${className || ""}`}
     >
       {children}
     </div>
   );
 }
-
-    

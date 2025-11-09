@@ -1,13 +1,16 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { getLanguages, deleteLanguage, Language } from "../services/languageService";
+import {
+  getLanguages,
+  deleteLanguage,
+  Language,
+} from "../services/languageService";
 import Card from "../components/Card";
 import HoverCard from "../components/HoverCard";
 import AddButton from "../components/AddButton";
 import RemoveButton from "../components/modals/RemoveButton";
 import AddLanguageModal from "../components/modals/AddLanguageModal";
-
 
 export default function LanguageList() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -26,7 +29,7 @@ export default function LanguageList() {
         setError(null);
       } catch (err: any) {
         if (err.message.includes("Unauthorized")) {
-          setError("Please log in to view your language.");
+          setError("Please log in to view your languages.");
         } else {
           setError(err.message || "Failed to load languages");
         }
@@ -38,61 +41,74 @@ export default function LanguageList() {
     fetchData();
   }, []);
 
+  // ✅ Add new language
   const handleAdd = () => setShowAddModal(true);
+  const handleSave = (newLang: Language) =>
+    setLanguages((prev) => [...prev, newLang]);
 
-  const handleSave = (newExp: Language) => {
-    setLanguages((prev) => [...prev, newExp]);
-  };
-
+  // ✅ Delete language
   const handleRemove = async (id: number) => {
     try {
       await deleteLanguage(id);
-      // Update the UI after backend confirms deletion
-      setLanguages((prev) => prev.filter((exp) => exp.id !== id));
+      setLanguages((prev) => prev.filter((lang) => lang.id !== id));
     } catch (err) {
       console.error(err);
-      alert("Error deleting Language");
+      alert("Error deleting language");
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <p className="text-gray-400">Loading...</p>;
+  if (error) return <p className="text-red-400">{error}</p>;
 
   return (
-    <Card title={t("Languages")}>
-      <div className="space-y-3">
+    <Card
+      title={t("Languages")}
+      className="bg-[#1a1a1d] text-gray-200 border border-gray-700 rounded-2xl shadow-lg"
+    >
+      <div className="space-y-4">
         {languages.map((language) => (
-          <HoverCard key={language.id}>
-            {/* ✅ Show Remove button only when authenticated */}
+          <HoverCard
+            key={language.id}
+            className="relative bg-[#222227] border border-gray-700 rounded-xl p-5 transition-all duration-200 hover:border-purple-500 hover:shadow-md"
+          >
+            {/* ✅ Remove Button (only visible when logged in) */}
             {isAuthenticated && (
               <div className="absolute top-3 right-4">
                 <RemoveButton onConfirm={() => handleRemove(language.id)} />
               </div>
             )}
 
-            {/* Content */}
+            {/* ✅ Language Info */}
             <div>
-              <h3 className="font-medium text-gray-900">{language.name}</h3>
-              <p className="text-indigo-600 font-medium mt-1">{language.proficiency}</p>
-              <p className="text-gray-700 mt-1">{language.description}</p>
+              <h3 className="font-semibold text-gray-100 text-lg">
+                {language.name}
+              </h3>
+              <p className="text-purple-400 font-medium mt-1">
+                {language.proficiency}
+              </p>
+              {language.description && (
+                <p className="text-gray-300 mt-2 leading-relaxed">
+                  {language.description}
+                </p>
+              )}
             </div>
           </HoverCard>
-
         ))}
 
+        {/* ✅ No languages yet */}
         {languages.length === 0 && (
           <p className="text-center text-gray-500 mt-3">No languages yet.</p>
         )}
       </div>
 
-      {/* ✅ Show Add button only when logged in */}
+      {/* ✅ Add button (only visible when logged in) */}
       {isAuthenticated && (
         <div className="flex justify-end mt-6">
-          <AddButton label="Add Work Experience" onClick={handleAdd} />
+          <AddButton label="Add Language" onClick={handleAdd} />
         </div>
       )}
 
-      {/* Modal */}
+      {/* ✅ Modal */}
       {showAddModal && (
         <AddLanguageModal
           onClose={() => setShowAddModal(false)}

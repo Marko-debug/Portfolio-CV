@@ -13,13 +13,13 @@ export default function CvPage() {
     <div>
       {/* Main content wrapper */}
       <div className="flex-1">
-        <div className="flex flex-col md:flex-row gap-8 py-10 pr-8">
-          {/* Right: Sidebar */}
-          <div className="w-full md:w-56 lg:w-64 xl:w-72 flex-shrink-0 -mr-4">
+        <div className="flex flex-col md:flex-row gap-8 pt-4 md:pt-10 pb-10 pr-8">
+          {/* Left: Sidebar/Profile */}
+          <div className="w-full md:w-56 lg:w-64 xl:w-72 flex-shrink-0 md:mt-0 mt-0">
             <ProfilePage />
           </div>
 
-          {/* Left: CV content */}
+          {/* Right: CV content */}
           <div className="flex-1 space-y-10">
             <AboutMe />
             <ProjectsList />
@@ -32,7 +32,6 @@ export default function CvPage() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

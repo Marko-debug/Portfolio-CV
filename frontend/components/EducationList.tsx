@@ -1,13 +1,16 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { getEducations, deleteEducation, Education } from "../services/educationService";
+import {
+  getEducations,
+  deleteEducation,
+  Education,
+} from "../services/educationService";
 import Card from "../components/Card";
 import HoverCard from "../components/HoverCard";
 import AddButton from "../components/AddButton";
 import RemoveButton from "../components/modals/RemoveButton";
 import AddEducationModal from "../components/modals/AddEducationModal";
-
 
 export default function EducationList() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -41,63 +44,77 @@ export default function EducationList() {
   // ✅ Add new education
   const handleAdd = () => setShowAddModal(true);
 
-  const handleSave = (newExp: Education) => {
-    setEducations((prev) => [...prev, newExp]);
-  };
+  const handleSave = (newEdu: Education) =>
+    setEducations((prev) => [...prev, newEdu]);
 
-  // ✅ Delete experience
+  // ✅ Delete education
   const handleRemove = async (id: number) => {
     try {
       await deleteEducation(id);
-      // Update the UI after backend confirms deletion
-      setEducations((prev) => prev.filter((exp) => exp.id !== id));
+      setEducations((prev) => prev.filter((edu) => edu.id !== id));
     } catch (err: any) {
-      if (err.message.includes("Unauthorized")) {
-        alert("Your session expired. Please log in again.");
-      } else {
-        alert("Error deleting experience");
-      }
+      alert(
+        err.message.includes("Unauthorized")
+          ? "Your session expired. Please log in again."
+          : "Error deleting education"
+      );
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <p className="text-gray-400">Loading...</p>;
+  if (error) return <p className="text-red-400">{error}</p>;
 
   return (
-    <Card title={t("Education")}>
-      <div className="space-y-3">
+    <Card title={t("Education")} className="bg-[#1a1a1d] text-gray-200 border border-gray-700 rounded-2xl shadow-lg">
+      <div className="space-y-4">
         {educations.map((edu) => (
-          <HoverCard key={edu.id}>
-            {/* Remove Button positioned absolutely inside HoverCard */}
+          <HoverCard
+            key={edu.id}
+            className="relative bg-[#222227] border border-gray-700 rounded-xl p-5 transition-all duration-200 hover:border-purple-500 hover:shadow-md"
+          >
+            {/* ✅ Show Remove button only when authenticated */}
             {isAuthenticated && (
               <div className="absolute top-3 right-4">
                 <RemoveButton onConfirm={() => handleRemove(edu.id)} />
               </div>
             )}
 
-            {/* Content */}
+            {/* Education details */}
             <div>
-              <h3 className="font-medium text-gray-900">{edu.institution}</h3>
-              <p className="text-indigo-600 font-medium mt-1">{edu.degree}</p>
-              <p className="text-indigo-600 font-medium mt-1">{edu.field}</p>
-              <p className="text-gray-700 mt-1">{edu.description}</p>
-              <p className="text-sm text-gray-400 mt-2">
-                {edu.startDate.split("T")[0]} → {edu.endDate?.split("T")[0] || "Present"}
+              <h3 className="font-semibold text-gray-100 text-lg">
+                {edu.institution}
+              </h3>
+              <p className="text-purple-400 font-medium mt-1">{edu.degree}</p>
+              <p className="text-purple-400 font-medium">{edu.field}</p>
+              {edu.description && (
+                <p className="text-gray-300 mt-2 leading-relaxed">
+                  {edu.description}
+                </p>
+              )}
+              <p className="text-sm text-gray-500 mt-3">
+                {edu.startDate.split("T")[0]} →{" "}
+                {edu.endDate?.split("T")[0] || "Present"}
               </p>
             </div>
           </HoverCard>
-
         ))}
 
+        {/* ✅ Show message when no education entries */}
         {educations.length === 0 && (
-          <p className="text-center text-gray-500 mt-3">No educations yet.</p>
+          <p className="text-center text-gray-500 mt-3">
+            No education records yet.
+          </p>
         )}
       </div>
 
-      {/* ✅ Show Add button only when logged in */}
+      {/* ✅ Add button (only visible when authenticated) */}
       {isAuthenticated && (
         <div className="flex justify-end mt-6">
-          <AddButton label="Add Work Education" onClick={handleAdd} />
+          <AddButton
+            label="Add Education"
+            onClick={handleAdd}
+            className="mt-4"
+          />
         </div>
       )}
 

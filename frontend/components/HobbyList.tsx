@@ -23,9 +23,9 @@ export default function HobbyList() {
         setError(null);
       } catch (err: any) {
         if (err.message.includes("Unauthorized")) {
-          setError("Please log in to view your experiences.");
+          setError("Please log in to view your hobbies.");
         } else {
-          setError(err.message || "Failed to load experiences");
+          setError(err.message || "Failed to load hobbies.");
         }
       } finally {
         setLoading(false);
@@ -51,19 +51,22 @@ export default function HobbyList() {
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <p className="text-gray-400">Loading...</p>;
+  if (error) return <p className="text-red-400">{error}</p>;
 
   return (
     <div className="relative">
-      <Card title={t("Hobbies")}>
-    
+      <Card
+        title={t("Hobbies")}
+        className="bg-[#1a1a1d] text-gray-200 border border-gray-700 rounded-2xl shadow-lg"
+      >
         <div className="flex flex-wrap gap-3 mt-2">
           {hobbies.length > 0 ? (
             hobbies.map((hobby) => (
               <button
                 key={hobby.id}
-                className="relative flex items-center gap-2 bg-indigo-50 border border-indigo-200 text-indigo-700 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-indigo-100 hover:-translate-y-0.5 transition transform"
+                className="relative flex items-center gap-2 bg-[#222227] border border-gray-700 text-gray-200 px-3 py-1.5 rounded-lg text-sm font-medium 
+                  hover:border-purple-500 hover:text-purple-400 hover:-translate-y-0.5 transition-all transform duration-200"
               >
                 {hobby.name}
                 {isAuthenticated && (
@@ -72,7 +75,7 @@ export default function HobbyList() {
                       e.stopPropagation();
                       handleRemove(hobby.id);
                     }}
-                    className="text-indigo-500 hover:text-red-500 transition cursor-pointer"
+                    className="text-gray-500 hover:text-red-500 transition cursor-pointer"
                   >
                     ✕
                   </span>
@@ -80,16 +83,18 @@ export default function HobbyList() {
               </button>
             ))
           ) : (
-            <p className="text-center text-gray-500 mt-3 w-full">No hobbies yet.</p>
+            <p className="text-center text-gray-500 mt-3 w-full">
+              No hobbies yet.
+            </p>
           )}
         </div>
 
-      {/* ✅ Show Add button only when logged in */}
-      {isAuthenticated && (
-        <div className="flex justify-end mt-6">
-          <AddButton label="Add Work Experience" onClick={handleAdd} />
-        </div>
-      )}
+        {/* ✅ Show Add button only when logged in */}
+        {isAuthenticated && (
+          <div className="flex justify-end mt-6">
+            <AddButton label="Add Hobby" onClick={handleAdd} />
+          </div>
+        )}
 
         {/* Modal */}
         {showAddModal && (
