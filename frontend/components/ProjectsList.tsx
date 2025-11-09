@@ -14,23 +14,17 @@ export default function ProjectsList() {
   const [projects] = useState<Project[]>([
     {
       id: 1,
-      title: "Portfolio",
+      title: "Portfolio-CV",
       description:
-        "Personal CV and career management platform built with React, Tailwind, and .NET backend.",
-      link: "https://github.com",
+        "Full-stack personal CV and career management platform leveraging Next.js and Tailwind CSS on the frontend with a .NET 9 Core REST API backend",
+      link: "https://github.com/Marko-debug/Portfolio-CV",
     },
     {
       id: 2,
-      title: "Portfolio Website",
+      title: "Diagram drawing tool",
       description:
-        "Modern personal portfolio with responsive layout and dynamic sections.",
-      link: "https://marekorihel.dev",
-    },
-    {
-      id: 3,
-      title: "TaskFlow App",
-      description:
-        "Full-stack productivity tool using React, TypeScript, and PostgreSQL.",
+        "Tool for drawing Composition Diagrams — a new process visualization method — built with JavaScript, SVG, HTML, and CSS.",
+      link: "https://github.com/Marko-debug/Bachelors-project",
     },
   ]);
 

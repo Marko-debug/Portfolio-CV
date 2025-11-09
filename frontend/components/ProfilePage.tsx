@@ -16,7 +16,7 @@ export default function ProfilePage() {
   const [email] = useState("orihel23@gmail.com");
   const [phone] = useState("+421 948 975 569");
   const [birthDate] = useState("2000-12-14");
-  const [linkedin] = useState("https://www.linkedin.com/in/marek-orihel/");
+  const [linkedin] = useState("https://www.linkedin.com/in/marek-orihel-37870a244");
 
   // useEffect(() => {
   //   getProfile()
