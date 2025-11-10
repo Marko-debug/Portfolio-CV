@@ -8,8 +8,8 @@
   "Certifications": "Zertifikate",
   "Hobbies": "Hobbys",
 
-  "all Rights Reserved": "Alle Rechte vorbehalten.",
-  "Crafted By": "Erstellt von",
+  "All rights reserved": "Alle Rechte vorbehalten.",
+  "Crafted by": "Erstellt von",
   "Metrics": "Metriken",
 
   "Log In": "Anmelden",
@@ -19,5 +19,8 @@
   "Forgot Password": "Passwort vergessen?",
   "years Old": "Jahre alt",
 
-  "About Me Text": "Ich bin ein leidenschaftlicher Frontend- und .NET-Entwickler, der gerne saubere, effiziente und skalierbare Softwarelösungen erstellt. Ich liebe es, schöne Benutzeroberflächen zu entwickeln, Benutzererlebnisse zu verbessern und ständig neue Technologien zu erlernen, um in der modernen Webentwicklung auf dem neuesten Stand zu bleiben."
+  "About Me Text": "Full-Stack-Softwareentwickler mit einer großen Leidenschaft für moderne, innovative Technologien. Ich konzentriere mich auf, Prozesse einfacher zu machen und zu automatisieren, damit Unternehmen klüger arbeiten und bessere Ergebnisse erzielen. Jede Aufgabe gehe ich mit der Disziplin, dem Engagement und der Anpassungsfähigkeit eines professionellen Basketballspielers an. Ich bin erfahren im Frontend, Backend, Deployment, Testing und Kundensupport, und unterstütze Kunden regelmäßig bei technischen Fragen. Diese Vielseitigkeit bringe ich sehr gern in meine nächste Rolle ein. Außerdem entwickle ich mich ständig weiter, nicht nur im Programmieren, sondern auch, dass ich Deutsch als meine vierte Sprache lerne.",
+
+  "View Detail": "Details ansehen",
+  "Present": "Heute"
 }

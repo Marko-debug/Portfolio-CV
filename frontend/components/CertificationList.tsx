@@ -96,7 +96,7 @@ export default function CertificationList() {
                     rel="noopener noreferrer"
                     className="text-purple-400 hover:text-purple-300 underline transition-colors"
                   >
-                    View Detail
+                    {t("View Detail")}
                   </a>
                 </p>
               )}
